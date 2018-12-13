@@ -263,7 +263,6 @@ public class Helpers {
      * Description:      Imports cell data from the specified file
      *
      * Used:
-     * @param celltowersPath path to the cell_towers.csv / cell_towers.csv.gz
      * @param cell Current Cell Information
      * @param importFile
      *

@@ -78,7 +78,7 @@ public class Device {
         roaming = tm.isNetworkRoaming();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            DeviceApi18.loadCellInfo(tm, this);
+            DeviceApi18.loadCellInfo(context, tm, this);
         }
 
         if (cell == null) {

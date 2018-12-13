@@ -5,6 +5,7 @@
  */
 package com.secupwn.aimsicd.ui.activities;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,11 +14,13 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.CellInfo;
 import android.telephony.PhoneStateListener;
@@ -53,6 +56,7 @@ import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.security.Permission;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -107,6 +111,7 @@ public final class MapViewerOsmDroid extends BaseActivity implements OnSharedPre
     private CellTowerGridMarkerClusterer mCellTowerGridMarkerClusterer;
     private Menu mOptionsMenu;
     TelephonyManager tm;
+
 
     private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
         @Override
@@ -476,6 +481,7 @@ public final class MapViewerOsmDroid extends BaseActivity implements OnSharedPre
                         log.warn("thread interrupted", e);
                     }
                 }
+
                 List<Cell> nc = mAimsicdService.getCellTracker().updateNeighboringCells();
                 for (Cell cell : nc) {
                     if (isCancelled()) {

@@ -5,8 +5,12 @@
  */
 package com.secupwn.aimsicd.utils;
 
+import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.CellIdentityCdma;
 import android.telephony.CellIdentityGsm;
 import android.telephony.CellIdentityLte;
@@ -39,11 +43,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DeviceApi18 {
 
-    public static void loadCellInfo(TelephonyManager tm, Device pDevice) {
+    private Context context;
+    public static void loadCellInfo(Context context, TelephonyManager tm, Device pDevice) {
         int lCurrentApiVersion = Build.VERSION.SDK_INT;
         try {
             if (pDevice.cell == null) {
                 pDevice.cell = new Cell();
+            }
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
             }
             List<CellInfo> cellInfoList = tm.getAllCellInfo();
             if (cellInfoList != null) {

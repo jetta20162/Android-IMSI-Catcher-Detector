@@ -5,16 +5,19 @@
  */
 package com.secupwn.aimsicd.service;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Build;
 import android.os.Vibrator;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.telephony.CellInfo;
@@ -271,7 +274,7 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
      */
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         final String KEY_UI_ICONS = context.getString(R.string.pref_ui_icons_key);
-        final String FEMTO_DETECTION =  context.getString(R.string.pref_femto_detection_key);
+        final String FEMTO_DETECTION = context.getString(R.string.pref_femto_detection_key);
         final String REFRESH = context.getString(R.string.pref_refresh_key);
         final String OCID_KEY = context.getString(R.string.pref_ocid_key);
         final String VIBRATE_ENABLE = context.getString(R.string.pref_notification_vibrate_enable);
@@ -330,6 +333,16 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
      */
     public List<Cell> updateNeighboringCells() {
         List<Cell> neighboringCells = new ArrayList<>();
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return null;
+        }
         List<NeighboringCellInfo> neighboringCellInfo = tm.getNeighboringCellInfo();
         if (neighboringCellInfo == null) {
             neighboringCellInfo = new ArrayList<>();
@@ -447,7 +460,7 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
         if (tm != null && tm.getNeighboringCellInfo() != null) { // See # 383
             neighborCellsCount = tm.getNeighboringCellInfo().size();
         }
-        
+
         // NC list present for that network type? (default is false)
         String ncListVariableByType = "nc_list_present_" + tm.getNetworkType();
         Boolean nclSupportedByNetwork = tinydb.getBoolean(ncListVariableByType);
@@ -854,7 +867,7 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
     public void onLocationChanged(Location loc) {
         // TODO: See issue #555 (DeviceApi17.java is using API 18 CellInfoWcdma calls.
         if (Build.VERSION.SDK_INT > 17) {
-            DeviceApi18.loadCellInfo(tm, device);
+            DeviceApi18.loadCellInfo(context, tm, device);
         }
 
         if (!device.cell.isValid()) {
@@ -968,7 +981,7 @@ public class CellTracker implements SharedPreferences.OnSharedPreferenceChangeLi
             } else
             if (trackingCell) {
                 contentText = context.getString(R.string.cell_tracking_active);
-            } 
+            }
             if (monitoringCell) {
                 contentText = context.getString(R.string.cell_monitoring_active);
             } else {

@@ -5,11 +5,14 @@
  */
 package com.secupwn.aimsicd.ui.activities;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.secupwn.aimsicd.AndroidIMSICatcherDetector;
@@ -27,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public abstract class BaseActivity extends InjectionAppCompatActivity {
-
     /**
      * Triggered when GUI is opened
      */

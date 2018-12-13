@@ -12,13 +12,14 @@ try {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
+//    buildToolsVersion '25.0.2'
+    flavorDimensions "default"
 
     defaultConfig {
         applicationId "com.SecUpwN.AIMSICD"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 26
         versionCode 43
         testApplicationId "com.SecUpwN.AIMSICD.test"
 
@@ -71,36 +72,33 @@ dependencies {
     // Please group dependencies for better review like below.
 
     // Android Support Libraries
-    compile 'com.android.support:appcompat-v7:25.3.0'
-    compile 'io.realm:android-adapters:2.0.0'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'io.realm:android-adapters:2.0.0'
 
     // OpenCSV (comma-separated values) parser library
-    compile 'au.com.bytecode:opencsv:2.4'
+    implementation 'au.com.bytecode:opencsv:2.4'
 
     // Easy to use Root Shell for Android Applications
-    compile 'com.github.Stericson:RootShell:d708ae1f0a'
+    implementation 'com.github.Stericson:RootShell:d708ae1f0a'
 
     // Dependency Injection for Android
-    compile 'io.freefair.injection:android-injection:2.0.0-beta16'
-    compile 'io.freefair.injection:okhttp:2.0.0-beta16'
-    compile 'io.freefair.android-util:function:3.0.0'
-    compile 'io.freefair:slf4j-android:1.7.21'
+    implementation 'io.freefair.injection:android-injection:2.0.0-beta16'
+    implementation 'io.freefair.injection:okhttp:2.0.0-beta16'
+    implementation 'io.freefair.android-util:function:3.0.0'
+    implementation 'io.freefair:slf4j-android:1.7.21'
 
-    compile 'io.freefair.android-colors:material:1.2.0'
+    implementation 'io.freefair.android-colors:material:1.2.0'
 
     // OSMBonusPack library to interact with OpenStreetMap data
-    compile 'com.github.MKergall.osmbonuspack:OSMBonusPack:v5.6'
+    implementation 'com.github.MKergall.osmbonuspack:OSMBonusPack:v5.6'
 
     // Transition library for animated transition effects
-    compile 'com.github.kaichunlin.transition:core:0.9.2'
+    implementation 'com.github.kaichunlin.transition:core:0.9.2'
 
-    // ShowcaseView library to highlight specific app elements
-    //compile 'com.github.amlcurran.showcaseview:library:5.3.0'
+    annotationProcessor 'org.projectlombok:lombok:1.16.16'
+    compileOnly 'org.projectlombok:lombok:1.16.16'
 
-    provided "org.projectlombok:lombok:1.16.16"
-    //apt "org.projectlombok:lombok:1.16.16"
-
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 }
 
 apply from: "signing.gradle"

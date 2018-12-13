@@ -5,6 +5,7 @@
  */
 package com.secupwn.aimsicd.ui.activities;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,10 +14,12 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -83,6 +86,10 @@ public class MainActivity extends BaseActivity implements AsyncResponse {
     private DrawerMenuActivityConfiguration mNavConf;
 
     private static final int ACTIVITY_RESULT_SELECT_CELLTOWERS = 1;
+
+    final int LOCATION_PERMISSION_REQUEST_CODE = 10001;
+    final int FINE_LOCATION_PERMISSION_REQUEST_CODE = 10002;
+    final int READ_PHONE_PERMISSION_REQUEST_CODE = 10003;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -176,7 +183,7 @@ public class MainActivity extends BaseActivity implements AsyncResponse {
             AlertDialog disclaimerAlert = disclaimer.create();
             disclaimerAlert.show();
         } else {
-            startService();
+            checkPermissionBeforeStartService();
         }
     }
 
@@ -474,7 +481,20 @@ public class MainActivity extends BaseActivity implements AsyncResponse {
     public void onResume() {
         super.onResume();
         invalidateOptionsMenu();
-        startService();
+       checkPermissionBeforeStartService();
+
+    }
+
+    void checkPermissionBeforeStartService() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        } else if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_PHONE_STATE}, READ_PHONE_PERMISSION_REQUEST_CODE);
+        } else if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            startService();
+        }
     }
 
 

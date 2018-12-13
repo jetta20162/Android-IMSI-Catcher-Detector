@@ -5,10 +5,12 @@
  */
 package com.secupwn.aimsicd.receiver;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.app.ActivityCompat;
 
 import com.secupwn.aimsicd.R;
 import com.secupwn.aimsicd.service.AimsicdService;
@@ -17,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class BootCompletedReceiver extends BroadcastReceiver {
+
+    final int LOCATION_PERMISSION_REQUEST_CODE = 1215;
 
     @Override
     public void onReceive(Context context, Intent intent) {
